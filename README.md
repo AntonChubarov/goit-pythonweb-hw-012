@@ -22,8 +22,14 @@ cd goit-pythonweb-hw-12
 docker compose up -d --build
 ```
 
+### Deployment
+
+This service is deployed on a personal virtual server hosted by [cityhost.ua](https://cityhost.ua/) provider.
+It leverages Docker Compose for container orchestration,
+uses Apache 2 as the reverse proxy, and relies on [nic.ua](https://nic.ua/) for domain management.
+SSL certificates are managed through Certbot.
 ### Testing
 
-Open http://127.0.0.1:8000/docs in your browser
+Open https://sandbox.nutarianfood.tech/docs in your browser
 to view the automatically generated Swagger
 documentation and test the API.
