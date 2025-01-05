@@ -3,6 +3,7 @@ import os
 import aioredis
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from fastapi_limiter import FastAPILimiter
 
 from api import contacts, auth, users
@@ -23,6 +24,12 @@ app.add_middleware(
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+)
+
+app.mount(
+    "/codedocs",
+    StaticFiles(directory="docs/_build/html", html=True),
+    name="codedocs"
 )
 
 app.include_router(contacts.router)

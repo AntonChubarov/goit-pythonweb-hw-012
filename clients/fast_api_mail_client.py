@@ -1,3 +1,9 @@
+"""
+FastAPI Mail Client Module
+
+This module provides a client for sending emails using FastAPI Mail.
+"""
+
 import logging
 import os
 from typing import List
@@ -12,7 +18,17 @@ logger = logging.getLogger("email_sender")
 
 
 class FastApiMailClient(IEmailSender):
+    """
+    A client for sending emails using FastAPI Mail that implements the IEmailSender interface.
+
+    Methods:
+        send_email(subject, recipients, body): Sends an email with the specified subject, recipients, and body.
+    """
+
     def __init__(self):
+        """
+        Initializes the FastAPI Mail client with configuration from environment variables.
+        """
         self.config = ConnectionConfig(
             MAIL_USERNAME=os.environ.get("MAIL_USERNAME"),
             MAIL_PASSWORD=os.environ.get("MAIL_PASSWORD"),
@@ -26,6 +42,17 @@ class FastApiMailClient(IEmailSender):
         self.mailer = FastMail(self.config)
 
     async def send_email(self, subject: str, recipients: List[EmailStr], body: str):
+        """
+        Sends an email with the specified subject, recipients, and body.
+
+        Args:
+            subject (str): The subject of the email.
+            recipients (List[EmailStr]): A list of recipient email addresses.
+            body (str): The body of the email.
+
+        Returns:
+            None
+        """
         message = MessageSchema(
             subject=subject,
             recipients=recipients,
