@@ -1,6 +1,7 @@
 import os
 from datetime import datetime
 
+from fastapi import HTTPException
 from sqlalchemy import Column, Integer, String, Date, Boolean, create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
@@ -26,6 +27,7 @@ class User(Base):
     created_at = Column(Date, default=datetime.utcnow)
     email_confirmed = Column(Boolean, default=False)
     avatar_url = Column(String, nullable=True)
+    role = Column(String, default="user")
 
 
 class UserRepository(IUserRepository, IUserUpdateRepository):
@@ -44,7 +46,8 @@ class UserRepository(IUserRepository, IUserUpdateRepository):
             email=user_data.email,
             hashed_password=user_data.hashed_password,
             created_at=datetime.utcnow(),
-            email_confirmed=False
+            email_confirmed=False,
+            role = "user"
         )
         self.db.add(new_user)
         self.db.commit()
@@ -69,3 +72,11 @@ class UserRepository(IUserRepository, IUserUpdateRepository):
         self.db.commit()
         self.db.refresh(user)
         return user
+
+    def update_password(self, user_id: int, hashed_password: str):
+        user = self.get_by_id(user_id)
+        if not user:
+            raise HTTPException(404, detail="User not found")
+        user.hashed_password = hashed_password
+        self.db.commit()
+        self.db.refresh(user)

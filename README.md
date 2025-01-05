@@ -9,11 +9,11 @@
 ### Installation
 
 ```shell
-git clone https://github.com/AntonChubarov/goit-pythonweb-hw-12
+git clone https://github.com/AntonChubarov/goit-pythonweb-hw-012
 ```
 
 ```shell
-cd goit-pythonweb-hw-12
+cd goit-pythonweb-hw-012
 ```
 
 ### Running the Application

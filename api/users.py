@@ -2,20 +2,10 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from fastapi.params import File
 from fastapi_limiter.depends import RateLimiter
 
-from clients.cloudinary_client import CloudinaryClient
-from clients.fast_api_mail_client import FastApiMailClient
-from repositories.user_repository import UserRepository
+from api.instances import auth_service, user_service
 from schemas.users import UserOut
-from services.auth_service import AuthService
-from services.user_service import UserService
 
 router = APIRouter(prefix="/users", tags=["users"])
-
-user_repository = UserRepository()
-email_client = FastApiMailClient()
-image_client = CloudinaryClient()
-auth_service = AuthService(user_repository=user_repository, email_sender=email_client)
-user_service = UserService(user_repository=user_repository, image_client=image_client)
 
 
 @router.get("/me", response_model=UserOut, dependencies=[Depends(RateLimiter(times=5, seconds=60))])
