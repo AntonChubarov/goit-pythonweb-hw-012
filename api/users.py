@@ -11,6 +11,7 @@ from schemas.users import UserOut
 
 SECRET_KEY = os.environ.get("AUTH_SECRET_KEY")
 ALGORITHM = os.environ.get("AUTH_JWT_ALGORITHM")
+REDIS_URL = os.environ.get("REDIS_URL", "redis://localhost:6379")
 
 
 def custom_key_func(request: Request):
@@ -23,7 +24,7 @@ def custom_key_func(request: Request):
         return f"ip-{get_remote_address(request)}"
 
 
-limiter = Limiter(key_func=custom_key_func, storage_uri="redis://redis:6379")
+limiter = Limiter(key_func=custom_key_func, storage_uri=REDIS_URL)
 
 router = APIRouter(prefix="/users", tags=["users"])
 

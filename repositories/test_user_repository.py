@@ -8,20 +8,17 @@ from schemas.users import UserInDB
 
 @pytest.fixture
 def mock_db_session(mocker):
-    """Fixture to provide a mock database session."""
     return mocker.MagicMock()
 
 
 @pytest.fixture
 def user_repository(mock_db_session):
-    """Fixture to provide a UserRepository instance with a mock session."""
     repo = UserRepository()
     repo.db = mock_db_session
     return repo
 
 
 def test_get_by_username(user_repository, mock_db_session):
-    """Test retrieving a user by username."""
     mock_user = MagicMock(
         id=1,
         username="testuser",
@@ -41,7 +38,6 @@ def test_get_by_username(user_repository, mock_db_session):
 
 
 def test_get_by_email(user_repository, mock_db_session):
-    """Test retrieving a user by email."""
     mock_user = MagicMock(
         id=2,
         username="anotheruser",
@@ -61,7 +57,6 @@ def test_get_by_email(user_repository, mock_db_session):
 
 
 def test_create(user_repository, mock_db_session):
-    """Test creating a new user."""
     user_data = UserInDB(
         username="newuser",
         email="newuser@example.com",
@@ -91,7 +86,6 @@ def test_create(user_repository, mock_db_session):
 
 
 def test_mark_email_confirmed(user_repository, mock_db_session):
-    """Test marking a user's email as confirmed."""
     mock_user = MagicMock(email_confirmed=False)
     mock_db_session.query.return_value.filter.return_value.first.return_value = mock_user
 
@@ -102,7 +96,6 @@ def test_mark_email_confirmed(user_repository, mock_db_session):
 
 
 def test_get_by_id(user_repository, mock_db_session):
-    """Test retrieving a user by ID."""
     mock_user = MagicMock(id=10)
     mock_db_session.query.return_value.filter.return_value.first.return_value = mock_user
 
@@ -113,7 +106,6 @@ def test_get_by_id(user_repository, mock_db_session):
 
 
 def test_update_avatar(user_repository, mock_db_session):
-    """Test updating a user's avatar."""
     mock_user = MagicMock(id=5, avatar_url=None)
     mock_db_session.query.return_value.filter.return_value.first.return_value = mock_user
 
@@ -126,7 +118,6 @@ def test_update_avatar(user_repository, mock_db_session):
 
 
 def test_update_avatar_user_not_found(user_repository, mock_db_session):
-    """Test updating a user's avatar when the user does not exist."""
     mock_db_session.query.return_value.filter.return_value.first.return_value = None
 
     updated_user = user_repository.update_avatar(user_id=999, avatar_url="https://example.com/avatar.png")
@@ -136,7 +127,6 @@ def test_update_avatar_user_not_found(user_repository, mock_db_session):
 
 
 def test_update_password(user_repository, mock_db_session):
-    """Test updating a user's password."""
     mock_user = MagicMock(id=10, hashed_password="old_hashed_password")
     mock_db_session.query.return_value.filter.return_value.first.return_value = mock_user
 
@@ -148,7 +138,6 @@ def test_update_password(user_repository, mock_db_session):
 
 
 def test_update_password_user_not_found(user_repository, mock_db_session):
-    """Test updating a user's password when the user does not exist."""
     mock_db_session.query.return_value.filter.return_value.first.return_value = None
 
     from fastapi import HTTPException

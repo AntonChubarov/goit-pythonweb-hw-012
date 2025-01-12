@@ -10,7 +10,7 @@ import aioredis
 
 from services.auth_service import ICache
 
-REDIS_URL = os.environ.get("REDIS_URL", "redis://redis:6379")
+REDIS_URL = os.environ.get("REDIS_URL", "redis://localhost:6379")
 
 
 class RedisCache(ICache):

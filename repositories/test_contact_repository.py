@@ -9,20 +9,17 @@ from schemas.contacts import ContactCreate, ContactUpdate
 
 @pytest.fixture
 def mock_db_session(mocker):
-    """Fixture to provide a mock database session."""
     return mocker.MagicMock()
 
 
 @pytest.fixture
 def contact_repository(mock_db_session):
-    """Fixture to provide a ContactRepository instance with a mock session."""
     repo = ContactRepository()
     repo.db = mock_db_session
     return repo
 
 
 def test_get_all_by_user(contact_repository, mock_db_session):
-    """Test fetching all contacts for a specific user."""
     mock_db_session.query.return_value.filter.return_value.all.return_value = [
         Contact(
             id=1,
@@ -54,7 +51,6 @@ def test_get_all_by_user(contact_repository, mock_db_session):
 
 
 def test_get_by_id_and_user(contact_repository, mock_db_session):
-    """Test fetching a specific contact by its ID and user ID."""
     mock_db_session.query.return_value.filter.return_value.first.return_value = Contact(
         id=1,
         user_id=1,
@@ -69,7 +65,6 @@ def test_get_by_id_and_user(contact_repository, mock_db_session):
 
 
 def test_get_by_id_and_user_not_found(contact_repository, mock_db_session):
-    """Test get_by_id_and_user returns None if the contact doesn't exist."""
     mock_db_session.query.return_value.filter.return_value.first.return_value = None
     contact_repository.db = mock_db_session
 
@@ -78,7 +73,6 @@ def test_get_by_id_and_user_not_found(contact_repository, mock_db_session):
 
 
 def test_create_for_user(contact_repository, mock_db_session):
-    """Test creating a new contact."""
     contact_data = ContactCreate(
         first_name="John",
         last_name="Doe",
@@ -102,7 +96,6 @@ def test_create_for_user(contact_repository, mock_db_session):
 
 
 def test_update_for_user(contact_repository, mock_db_session):
-    """Test updating a contact with optional fields."""
     contact_data = ContactUpdate(
         first_name="John Updated",
         additional_data="Updated additional notes"
@@ -133,7 +126,6 @@ def test_update_for_user(contact_repository, mock_db_session):
 
 
 def test_update_for_user_not_found(contact_repository, mock_db_session):
-    """Test update_for_user returns None if no contact is found."""
     mock_db_session.query.return_value.filter.return_value.first.return_value = None
     contact_repository.db = mock_db_session
 
@@ -143,7 +135,6 @@ def test_update_for_user_not_found(contact_repository, mock_db_session):
 
 
 def test_delete_for_user(contact_repository, mock_db_session):
-    """Test deleting a contact."""
     mock_contact = MagicMock()
     mock_db_session.query.return_value.filter.return_value.first.return_value = mock_contact
     mock_db_session.delete = MagicMock()
@@ -157,7 +148,6 @@ def test_delete_for_user(contact_repository, mock_db_session):
 
 
 def test_delete_for_user_not_found(contact_repository, mock_db_session):
-    """Test delete_for_user returns None if the contact does not exist."""
     mock_db_session.query.return_value.filter.return_value.first.return_value = None
     contact_repository.db = mock_db_session
 
@@ -168,7 +158,6 @@ def test_delete_for_user_not_found(contact_repository, mock_db_session):
 
 
 def test_search_by_user(contact_repository, mock_db_session):
-    """Test searching contacts for a user by first_name."""
     mock_db_session.query.return_value.filter.return_value.filter.return_value.all.return_value = [
         Contact(id=1, user_id=1, first_name="John", last_name="Doe")
     ]
@@ -180,7 +169,6 @@ def test_search_by_user(contact_repository, mock_db_session):
 
 
 def test_search_by_user_no_filters(contact_repository, mock_db_session):
-    """Test searching contacts for a user with no filters (returns all user's contacts)."""
     mock_db_session.query.return_value.filter.return_value.all.return_value = [
         Contact(id=2, user_id=1, first_name="Jake", last_name="Smith"),
         Contact(id=3, user_id=1, first_name="Alice", last_name="Johnson"),
@@ -194,7 +182,6 @@ def test_search_by_user_no_filters(contact_repository, mock_db_session):
 
 
 def test_search_by_user_multiple_filters(contact_repository, mock_db_session):
-    """Test searching contacts with multiple filters (first_name, last_name, email)."""
     mock_query = mock_db_session.query.return_value
 
     mock_query.filter.side_effect = lambda *args, **kwargs: mock_query
@@ -217,7 +204,6 @@ def test_search_by_user_multiple_filters(contact_repository, mock_db_session):
 
 
 def test_search_by_user_no_matches(contact_repository, mock_db_session):
-    """Test searching contacts yields no results."""
     mock_db_session.query.return_value.filter.return_value.filter.return_value.filter.return_value.all.return_value = []
     contact_repository.db = mock_db_session
 
@@ -226,7 +212,6 @@ def test_search_by_user_no_matches(contact_repository, mock_db_session):
 
 
 def test_get_upcoming_birthdays_by_user(contact_repository, mock_db_session):
-    """Test fetching upcoming birthdays."""
     today = datetime.today()
     upcoming_contact = Contact(
         id=1,
@@ -244,7 +229,6 @@ def test_get_upcoming_birthdays_by_user(contact_repository, mock_db_session):
 
 
 def test_get_upcoming_birthdays_by_user_no_matches(contact_repository, mock_db_session):
-    """Test when there are no upcoming birthdays within 7 days."""
     mock_db_session.query.return_value.filter.return_value.all.return_value = []
     contact_repository.db = mock_db_session
 

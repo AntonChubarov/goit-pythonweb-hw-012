@@ -9,7 +9,7 @@ from slowapi.errors import RateLimitExceeded
 
 from api import contacts, auth, users
 
-REDIS_URL = os.environ.get("REDIS_URL", "redis://redis:6379")
+REDIS_URL = os.environ.get("REDIS_URL", "redis://localhost:6379")
 
 app = FastAPI()
 

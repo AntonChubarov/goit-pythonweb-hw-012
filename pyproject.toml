@@ -25,6 +25,8 @@ aioredis = "^2.0.1"
 slowapi = "^0.1.9"
 pytest = "^8.3.4"
 pytest-mock = "^3.14.0"
+pytest-cov = "^6.0.0"
+pytest-asyncio = "^0.25.2"
 
 
 [tool.poetry.group.dev.dependencies]
