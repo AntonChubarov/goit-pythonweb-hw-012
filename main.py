@@ -1,21 +1,22 @@
 import os
 
 import aioredis
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
-from fastapi_limiter import FastAPILimiter
+from slowapi.errors import RateLimitExceeded
 
 from api import contacts, auth, users
 
 REDIS_URL = os.environ.get("REDIS_URL", "redis://redis:6379")
+
 app = FastAPI()
 
 
 @app.on_event("startup")
 async def startup():
     redis = aioredis.from_url(REDIS_URL, encoding="utf-8", decode_responses=True)
-    await FastAPILimiter.init(redis)
 
 
 app.add_middleware(
@@ -25,6 +26,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+@app.exception_handler(RateLimitExceeded)
+async def rate_limit_exceeded_handler(request: Request, exc: RateLimitExceeded):
+    return JSONResponse(
+        status_code=429,
+        content={"detail": "Too many requests, please try again later"},
+    )
+
 
 app.mount(
     "/codedocs",

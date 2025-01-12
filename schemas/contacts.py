@@ -51,11 +51,11 @@ class ContactUpdate(BaseModel):
         birthday (Optional[date]): The contact's birthday.
         additional_data (Optional[str]): Additional notes or details about the contact.
     """
-    first_name: Optional[str]
-    last_name: Optional[str]
-    email: Optional[EmailStr]
-    phone_number: Optional[str]
-    birthday: Optional[date]
+    first_name: Optional[str] = None
+    last_name: Optional[str] = None
+    email: Optional[EmailStr] = None
+    phone_number: Optional[str] = None
+    birthday: Optional[date] = None
     additional_data: Optional[str] = None
 
 

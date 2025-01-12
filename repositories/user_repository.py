@@ -15,7 +15,7 @@ from schemas.users import UserInDB
 from services.auth_service import IUserRepository
 from services.user_service import IUserUpdateRepository
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
+DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://postgres:qwerty@localhost:5432/hw10")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)

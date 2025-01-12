@@ -13,7 +13,7 @@ from sqlalchemy.orm import sessionmaker, declarative_base
 from schemas.contacts import ContactCreate, ContactUpdate
 from services.contact_service import IContactRepository
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
+DATABASE_URL = os.environ.get("DATABASE_URL", "postgresql://postgres:qwerty@localhost:5432/hw10")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
